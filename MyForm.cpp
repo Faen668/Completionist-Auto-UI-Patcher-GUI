@@ -12,7 +12,7 @@ using namespace System::Windows::Forms;
 int main(array<String^>^ args) {
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
-    CompletionistAutoUIPatcherGUI::MyForm form;
+    CompletionistAutoUIPatcherGUI::MyForm form(args);
     Application::Run(% form);
     return 0;
 }
@@ -29,7 +29,7 @@ namespace standard
     //---------------------------------------------------
     //---------------------------------------------------
 
-    bool IsInstalledInMO2Directory() {
+    bool interfaceFolderExists() {
         // Get the path of the current executable
         String^ exePath = System::Windows::Forms::Application::StartupPath;
 
@@ -294,13 +294,16 @@ namespace standard
         std::string actionScriptFile = extractionDir + "\\scripts\\__Packages\\LootMenu\\" + className + ".as";
         std::string scriptName = "\\__Packages\\LootMenu\\" + className;
         std::string outPutFileDir{};
-
+       
         if (form->toStdString(form->OutputFilesBox->Text) == "{Current Directory}/output") {
             outPutFileDir = curWorkingDir + "\\output";
         }
-        else {
+        else
+        {
             outPutFileDir = form->toStdString(form->OutputFilesBox->Text);
         }
+
+        outPutFileDir += form->CreateNewModFolder->Checked ? "\\mods\\Completionist UI Patcher Output\\interface" : "\\interface";
 
         // Ensure extraction directory exists
         if (!createDirectory(extractionDir)) {
@@ -440,8 +443,18 @@ namespace standard
         if (form->toStdString(form->OutputFilesBox->Text) == "{Current Directory}/output") {
             outPutFileDir = curWorkingDir + "\\output";
         }
-        else {
+        else 
+        {
             outPutFileDir = form->toStdString(form->OutputFilesBox->Text);
+        }
+
+        if (className == "InventoryListEntry") 
+        {
+            outPutFileDir += form->CreateNewModFolder->Checked ? "\\mods\\Completionist UI Patcher Output\\interface\\skyui" : "\\interface\\skyui";
+        }
+        else
+        {
+            outPutFileDir += form->CreateNewModFolder->Checked ? "\\mods\\Completionist UI Patcher Output\\interface" : "\\interface";
         }
 
         // Ensure extraction directory exists

@@ -15,7 +15,7 @@
 
 namespace standard 
 {
-	static bool IsInstalledInMO2Directory();
+	static bool interfaceFolderExists();
 
 	static void InventoryFormatter(const std::string & fileName, const std::string& className);
 	static void QuickLootFormatter(const std::string& fileName, const std::string& className);
@@ -78,19 +78,30 @@ namespace CompletionistAutoUIPatcherGUI
 	private: System::Windows::Forms::ToolTip^ toolTip1;
 
 	private: ComponentFactory::Krypton::Toolkit::KryptonButton^ About;
+	public: System::Windows::Forms::CheckBox^ CreateNewModFolder;
+
 
 	public:
 		static String^ CurrentFile;
+		static bool modManagerLaunched;
 
-		MyForm(void)
+		MyForm(array<String^>^ args)
 		{
 			InitializeComponent();
+
+			HandleCommandLineArguments(args);
+
 			logBuilder = gcnew StringBuilder();
 			instance = this;
 
-			if (standard::IsInstalledInMO2Directory()) {
+			if (modManagerLaunched) {
 				this->LoadFilePathsFromMO2();
-			}	
+				this->CreateNewModFolder->Visible = true;
+			}
+			else
+			{
+				this->CreateNewModFolder->Visible = false;
+			}
 		}
 
 		static MyForm^ GetInstance() { return instance; };
@@ -101,7 +112,6 @@ namespace CompletionistAutoUIPatcherGUI
 		void LoadFilePathsFromMO2()
 		{
 			this->ClearLog();
-			this->LogMessage("Interface Directory Detected...");
 			this->LogMessage("Attempting to auto load file paths...");
 
 			String^ exePath = System::Windows::Forms::Application::StartupPath;
@@ -217,6 +227,24 @@ namespace CompletionistAutoUIPatcherGUI
 		}
 
 	private:
+		void HandleCommandLineArguments(array<String^>^ args)
+		{
+			// Process the command-line arguments
+			for each (String ^ arg in args)
+			{
+				if (arg == "-mo2") {
+					if (standard::interfaceFolderExists()) {
+						modManagerLaunched = true;
+					}
+					else
+					{
+						this->LogMessage("Unable to locate interface folder...");
+					}
+					
+				}
+			}
+		}
+
 #pragma region Windows Form Designer generated code
 		/// <summary>
 		/// Required method for Designer support - do not modify
@@ -244,6 +272,7 @@ namespace CompletionistAutoUIPatcherGUI
 			this->OutputFilesBox_Image = (gcnew System::Windows::Forms::PictureBox());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
+			this->CreateNewModFolder = (gcnew System::Windows::Forms::CheckBox());
 			this->About = (gcnew ComponentFactory::Krypton::Toolkit::KryptonButton());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->InventoryListsFilePathBox_Image))->BeginInit();
@@ -642,12 +671,14 @@ namespace CompletionistAutoUIPatcherGUI
 			// 
 			// InventoryListsFilePathBox_Image
 			// 
+			this->InventoryListsFilePathBox_Image->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->InventoryListsFilePathBox_Image->BackColor = System::Drawing::Color::White;
 			this->InventoryListsFilePathBox_Image->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Center;
 			this->InventoryListsFilePathBox_Image->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"InventoryListsFilePathBox_Image.Image")));
 			this->InventoryListsFilePathBox_Image->Location = System::Drawing::Point(653, 222);
 			this->InventoryListsFilePathBox_Image->Name = L"InventoryListsFilePathBox_Image";
 			this->InventoryListsFilePathBox_Image->Size = System::Drawing::Size(32, 32);
-			this->InventoryListsFilePathBox_Image->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
+			this->InventoryListsFilePathBox_Image->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
 			this->InventoryListsFilePathBox_Image->TabIndex = 24;
 			this->InventoryListsFilePathBox_Image->TabStop = false;
 			this->InventoryListsFilePathBox_Image->Click += gcnew System::EventHandler(this, &MyForm::InventoryListsFilePathBox_Image_Click);
@@ -655,25 +686,26 @@ namespace CompletionistAutoUIPatcherGUI
 			// CraftingMenuFilePathBox_Image
 			// 
 			this->CraftingMenuFilePathBox_Image->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->CraftingMenuFilePathBox_Image->BackColor = System::Drawing::Color::White;
 			this->CraftingMenuFilePathBox_Image->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Center;
 			this->CraftingMenuFilePathBox_Image->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"CraftingMenuFilePathBox_Image.Image")));
-			this->CraftingMenuFilePathBox_Image->Location = System::Drawing::Point(653, 270);
+			this->CraftingMenuFilePathBox_Image->Location = System::Drawing::Point(653, 267);
 			this->CraftingMenuFilePathBox_Image->Name = L"CraftingMenuFilePathBox_Image";
 			this->CraftingMenuFilePathBox_Image->Size = System::Drawing::Size(32, 32);
-			this->CraftingMenuFilePathBox_Image->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
+			this->CraftingMenuFilePathBox_Image->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
 			this->CraftingMenuFilePathBox_Image->TabIndex = 25;
 			this->CraftingMenuFilePathBox_Image->TabStop = false;
 			this->CraftingMenuFilePathBox_Image->Click += gcnew System::EventHandler(this, &MyForm::CraftingMenuFilePathBox_Image_Click);
 			// 
 			// QuickLootFilePathBox_Image
 			// 
-			this->QuickLootFilePathBox_Image->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->QuickLootFilePathBox_Image->BackColor = System::Drawing::Color::White;
 			this->QuickLootFilePathBox_Image->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Center;
 			this->QuickLootFilePathBox_Image->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"QuickLootFilePathBox_Image.Image")));
-			this->QuickLootFilePathBox_Image->Location = System::Drawing::Point(653, 318);
+			this->QuickLootFilePathBox_Image->Location = System::Drawing::Point(653, 315);
 			this->QuickLootFilePathBox_Image->Name = L"QuickLootFilePathBox_Image";
 			this->QuickLootFilePathBox_Image->Size = System::Drawing::Size(32, 32);
-			this->QuickLootFilePathBox_Image->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
+			this->QuickLootFilePathBox_Image->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
 			this->QuickLootFilePathBox_Image->TabIndex = 26;
 			this->QuickLootFilePathBox_Image->TabStop = false;
 			this->toolTip1->SetToolTip(this->QuickLootFilePathBox_Image, L"Only for QuicklootEE and QuicklootRE - QuicklootIE has direct API Support.");
@@ -681,13 +713,14 @@ namespace CompletionistAutoUIPatcherGUI
 			// 
 			// ConstructibleObjectMenuFilePathBox_Image
 			// 
-			this->ConstructibleObjectMenuFilePathBox_Image->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->ConstructibleObjectMenuFilePathBox_Image->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->ConstructibleObjectMenuFilePathBox_Image->BackColor = System::Drawing::Color::White;
 			this->ConstructibleObjectMenuFilePathBox_Image->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Center;
 			this->ConstructibleObjectMenuFilePathBox_Image->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"ConstructibleObjectMenuFilePathBox_Image.Image")));
-			this->ConstructibleObjectMenuFilePathBox_Image->Location = System::Drawing::Point(653, 366);
+			this->ConstructibleObjectMenuFilePathBox_Image->Location = System::Drawing::Point(653, 365);
 			this->ConstructibleObjectMenuFilePathBox_Image->Name = L"ConstructibleObjectMenuFilePathBox_Image";
 			this->ConstructibleObjectMenuFilePathBox_Image->Size = System::Drawing::Size(32, 32);
-			this->ConstructibleObjectMenuFilePathBox_Image->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
+			this->ConstructibleObjectMenuFilePathBox_Image->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
 			this->ConstructibleObjectMenuFilePathBox_Image->TabIndex = 27;
 			this->ConstructibleObjectMenuFilePathBox_Image->TabStop = false;
 			this->ConstructibleObjectMenuFilePathBox_Image->Click += gcnew System::EventHandler(this, &MyForm::ConstructibleObjectMenuFilePathBox_Image_Click);
@@ -716,7 +749,7 @@ namespace CompletionistAutoUIPatcherGUI
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(128, 28);
 			this->label3->TabIndex = 29;
-			this->label3->Text = L"Version: 1.0.2";
+			this->label3->Text = L"Version: 1.0.3";
 			// 
 			// toolTip1
 			// 
@@ -724,6 +757,19 @@ namespace CompletionistAutoUIPatcherGUI
 			this->toolTip1->AutoPopDelay = 0;
 			this->toolTip1->InitialDelay = 0;
 			this->toolTip1->ReshowDelay = 100;
+			// 
+			// CreateNewModFolder
+			// 
+			this->CreateNewModFolder->AutoSize = true;
+			this->CreateNewModFolder->ForeColor = System::Drawing::Color::Gray;
+			this->CreateNewModFolder->Location = System::Drawing::Point(372, 423);
+			this->CreateNewModFolder->Name = L"CreateNewModFolder";
+			this->CreateNewModFolder->Size = System::Drawing::Size(327, 32);
+			this->CreateNewModFolder->TabIndex = 32;
+			this->CreateNewModFolder->Text = L"Create New Mod Folder (MO2)";
+			this->toolTip1->SetToolTip(this->CreateNewModFolder, L"\r\n");
+			this->CreateNewModFolder->UseVisualStyleBackColor = true;
+			this->CreateNewModFolder->CheckedChanged += gcnew System::EventHandler(this, &MyForm::CreateNewModFolder_CheckedChanged);
 			// 
 			// About
 			// 
@@ -813,6 +859,7 @@ namespace CompletionistAutoUIPatcherGUI
 				static_cast<System::Int32>(static_cast<System::Byte>(252)));
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->ClientSize = System::Drawing::Size(1521, 461);
+			this->Controls->Add(this->CreateNewModFolder);
 			this->Controls->Add(this->About);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->OutputFilesBox_Image);
@@ -1048,7 +1095,7 @@ namespace CompletionistAutoUIPatcherGUI
 	private: System::Void About_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ aboutText =
 			"Completionist Automated UI Patcher by Faen90\n"
-			"Version: 1.0.2\n\n"
+			"Version: 1.0.3\n\n"
 			"Description:\n"
 			"An Automated SWF Patcher to easily add Compeltionist functionality to any supported SWF.\n\n"
 			"Features:\n"
@@ -1065,7 +1112,57 @@ namespace CompletionistAutoUIPatcherGUI
 		MessageBox::Show(aboutText, "About...", MessageBoxButtons::OK, MessageBoxIcon::Information);
 	}
 
-	private: System::Void AutoPatch_Click(System::Object^ sender, System::EventArgs^ e) {
+	private: System::Void CreateNewModFolder_CheckedChanged(System::Object^ sender, System::EventArgs^ e)
+	{
+		if (this->CreateNewModFolder->Checked)
+		{
+			FolderBrowserDialog^ folderBrowserDialog = gcnew FolderBrowserDialog();
+
+			// Set properties for the folder browser dialog
+			folderBrowserDialog->Description = "Select MO2 base directory.";
+			folderBrowserDialog->ShowNewFolderButton = false; // Optional: disable the "New Folder" button
+
+			// Show the dialog and capture the result
+			System::Windows::Forms::DialogResult result = folderBrowserDialog->ShowDialog();
+
+			// Check if user selected a folder and proceed accordingly
+			if (result == System::Windows::Forms::DialogResult::OK)
+			{
+				String^ selectedPath = folderBrowserDialog->SelectedPath;
+				String^ modOrganizerPath = System::IO::Path::Combine(selectedPath, "ModOrganizer.exe");
+
+				// If the file does not exist, show a warning and reset the checkbox and other UI elements
+				if (!System::IO::File::Exists(modOrganizerPath))
+				{
+					System::Windows::Forms::MessageBox::Show("The selected folder does not contain 'ModOrganizer.exe'. Please select a valid folder.", "MO2 Not Found", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Warning);
+					ResetToDefaultState();
+					return;
+				}
+
+				// If the file exists, update the OutputFilesBox and hide the OutputFilesBox_Image
+				OutputFilesBox->Text = selectedPath;
+				this->OutputFilesBox_Image->Visible = false;
+			}
+			else
+			{
+				// If the dialog was cancelled, reset the checkbox and show the OutputFilesBox_Image
+				ResetToDefaultState();
+				return;
+			}
+		}
+		else
+		{
+			// If the checkbox is unchecked, reset to the default state
+			ResetToDefaultState();
+		}
+	}
+
+		   // Helper method to reset UI elements to their default state
+	private: System::Void ResetToDefaultState()
+	{
+		this->CreateNewModFolder->Checked = false;
+		this->OutputFilesBox->Text = "{Current Directory}/output";
+		this->OutputFilesBox_Image->Visible = true;
 	}
 };
 }
