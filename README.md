@@ -1,7 +1,7 @@
 # Completionist-Auto-UI-Patcher-GUI
  Automated SWF Patcher For Completionist
 
-![image](https://github.com/Faen668/Completionist-Auto-UI-Patcher-GUI/assets/42012063/1dd1c98f-56a4-4598-b043-ebcfe9f0ca4a)
+![image](https://github.com/user-attachments/assets/05d5fa5d-4296-4b4b-87c1-099cd7d99669)
 
 # MO2 Support
 To run the patcher through MO2, extract the zip to your MO2/mods folder.
