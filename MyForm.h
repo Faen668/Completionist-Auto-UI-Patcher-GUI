@@ -88,11 +88,10 @@ namespace CompletionistAutoUIPatcherGUI
 		MyForm(array<String^>^ args)
 		{
 			InitializeComponent();
-
-			HandleCommandLineArguments(args);
-
 			logBuilder = gcnew StringBuilder();
 			instance = this;
+
+			HandleCommandLineArguments(args);
 
 			if (modManagerLaunched) {
 				this->LoadFilePathsFromMO2();
@@ -118,6 +117,10 @@ namespace CompletionistAutoUIPatcherGUI
 
 			// Combine with "interface" folder to check
 			String^ interfaceFolderPath = Path::Combine(exePath, "interface");
+
+			if (!Directory::Exists(interfaceFolderPath)) {
+				Directory::CreateDirectory(interfaceFolderPath);  // Create the directory if it doesn't exist
+			}
 
 			// Combine with "skyui" folder and file name
 			String^ skyuiFolderPath = Path::Combine(interfaceFolderPath, "skyui");
@@ -749,7 +752,7 @@ namespace CompletionistAutoUIPatcherGUI
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(128, 28);
 			this->label3->TabIndex = 29;
-			this->label3->Text = L"Version: 1.0.3";
+			this->label3->Text = L"Version: 1.0.4";
 			// 
 			// toolTip1
 			// 

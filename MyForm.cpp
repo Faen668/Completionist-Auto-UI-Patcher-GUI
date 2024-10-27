@@ -8,12 +8,21 @@ using namespace System::Windows::Forms;
 //---------------------------------------------------
 //---------------------------------------------------
 
-[STAThreadAttribute]
 int main(array<String^>^ args) {
-    Application::EnableVisualStyles();
-    Application::SetCompatibleTextRenderingDefault(false);
-    CompletionistAutoUIPatcherGUI::MyForm form(args);
-    Application::Run(% form);
+    try {
+        Application::EnableVisualStyles();
+        Application::SetCompatibleTextRenderingDefault(false);
+
+        if (args == nullptr) {
+            args = gcnew array<String^>(0);  // Create an empty array if args is null
+        }
+
+        CompletionistAutoUIPatcherGUI::MyForm form(args);
+        Application::Run(% form);
+    }
+    catch (Exception^ e) {
+        MessageBox::Show("An error occurred: " + e->Message, "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+    }
     return 0;
 }
 
@@ -303,7 +312,7 @@ namespace standard
             outPutFileDir = form->toStdString(form->OutputFilesBox->Text);
         }
 
-        outPutFileDir += form->CreateNewModFolder->Checked ? "\\mods\\Completionist UI Patcher Output\\interface" : "\\interface";
+        outPutFileDir += form->CreateNewModFolder->Checked ? "\\mods\\Completionist - Skyrim Completion Tracker (NG) - Output\\interface" : "\\interface";
 
         // Ensure extraction directory exists
         if (!createDirectory(extractionDir)) {
@@ -450,11 +459,11 @@ namespace standard
 
         if (className == "InventoryListEntry") 
         {
-            outPutFileDir += form->CreateNewModFolder->Checked ? "\\mods\\Completionist UI Patcher Output\\interface\\skyui" : "\\interface\\skyui";
+            outPutFileDir += form->CreateNewModFolder->Checked ? "\\mods\\Completionist - Skyrim Completion Tracker (NG) - Output\\interface\\skyui" : "\\interface\\skyui";
         }
         else
         {
-            outPutFileDir += form->CreateNewModFolder->Checked ? "\\mods\\Completionist UI Patcher Output\\interface" : "\\interface";
+            outPutFileDir += form->CreateNewModFolder->Checked ? "\\mods\\Completionist - Skyrim Completion Tracker (NG) - Output\\interface" : "\\interface";
         }
 
         // Ensure extraction directory exists
