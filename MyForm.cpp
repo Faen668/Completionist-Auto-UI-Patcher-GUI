@@ -8,21 +8,12 @@ using namespace System::Windows::Forms;
 //---------------------------------------------------
 //---------------------------------------------------
 
+[STAThreadAttribute]
 int main(array<String^>^ args) {
-    try {
-        Application::EnableVisualStyles();
-        Application::SetCompatibleTextRenderingDefault(false);
-
-        if (args == nullptr) {
-            args = gcnew array<String^>(0);  // Create an empty array if args is null
-        }
-
-        CompletionistAutoUIPatcherGUI::MyForm form(args);
-        Application::Run(% form);
-    }
-    catch (Exception^ e) {
-        MessageBox::Show("An error occurred: " + e->Message, "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
-    }
+    Application::EnableVisualStyles();
+    Application::SetCompatibleTextRenderingDefault(false);
+    CompletionistAutoUIPatcherGUI::MyForm form(args);
+    Application::Run(% form);
     return 0;
 }
 

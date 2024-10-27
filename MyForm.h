@@ -752,7 +752,7 @@ namespace CompletionistAutoUIPatcherGUI
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(128, 28);
 			this->label3->TabIndex = 29;
-			this->label3->Text = L"Version: 1.0.4";
+			this->label3->Text = L"Version: 1.0.5";
 			// 
 			// toolTip1
 			// 
