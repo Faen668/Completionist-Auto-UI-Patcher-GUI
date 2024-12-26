@@ -1098,7 +1098,7 @@ namespace CompletionistAutoUIPatcherGUI
 	private: System::Void About_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ aboutText =
 			"Completionist Automated UI Patcher by Faen90\n"
-			"Version: 1.0.3\n\n"
+			"Version: 1.0.5\n\n"
 			"Description:\n"
 			"An Automated SWF Patcher to easily add Compeltionist functionality to any supported SWF.\n\n"
 			"Features:\n"
